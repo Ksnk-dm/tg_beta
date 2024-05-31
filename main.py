@@ -1,21 +1,22 @@
 import asyncio
 import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+from aiogram.enums.dice_emoji import DiceEmoji
+from config_reader import config
+from aiogram.enums import ParseMode
+from aiogram import F
+from aiogram.types import Message
+from aiogram.filters import Command
+from aiogram.enums import ParseMode
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from handlers import dp
 
-from aiogram import Bot, Dispatcher
-from aiogram.enums.parse_mode import ParseMode
-from aiogram.fsm.storage.memory import MemoryStorage
-
-import config
-from handlers import router
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=config.bot_token.get_secret_value())
 
 async def main():
-    bot = Bot(token=config.BOT_TOKEN, parse_mode=ParseMode.HTML)
-    dp = Dispatcher(storage=MemoryStorage())
-    dp.include_router(router)
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    await dp.start_polling(bot)
 
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(main())
+# if __name__ == "__main__":
+#     asyncio.run(main())
